@@ -21,7 +21,6 @@ def makeMove(board, player):
 			if (winningMove[0]==player):
 				board[winningMove[1]] = player
 				# player has won
-				return player
 			else:
 				board[winningMove[1]] = player	
 		elif(board[4]==" "):
