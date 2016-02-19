@@ -189,6 +189,7 @@ def parseBoardOut(input):
 # put your own credentials here 
 ACCOUNT_SID = "<ACCOUNT_SID>" 
 AUTH_TOKEN = "<AUTH_TOKEN>" 
+PHONE_NUM = "<TWILIO NUMBER>"
 
 
  
@@ -207,7 +208,7 @@ def recieveText():
 	if(str(body)=="New game"):
 		client.messages.create(
 		    to=fromNum,
-			from_="+19739476736",
+			from_=PHONE_NUM,
 		    body="You are playing as x", 
 		)
 		responseText=board
@@ -235,7 +236,7 @@ def recieveText():
 
 	client.messages.create(
 	    to=fromNum,
-		from_="<twilio phone number>",
+		from_=PHONE_NUM,
 	    body=responseText, 
 	)
 	return "message recieved"
