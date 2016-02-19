@@ -15,13 +15,13 @@ def makeMove(board, player):
 	winningMove = findWin(board, player)
 	print winningMove
 	if(checkBoard(board)!=None):
-		print "Cant Move Game Over",checkBoard(board)
+		return None
 	else:
 		if ((winningMove!=(None, None)) and (board[winningMove[1]]==" ")):
-			print "win:",winningMove
 			if (winningMove[0]==player):
 				board[winningMove[1]] = player
-				print "GAME OVER| winner:", player
+				# player has won
+				return player
 			else:
 				board[winningMove[1]] = player	
 		elif(board[4]==" "):
@@ -142,22 +142,6 @@ def findWin(board, player):
 
 	return (winningPlayer, winningSpot)
 
-def getTurn(board):
-	xnum = 0
-	onum = 0
-
-	for spot in xrange(0,len(board)):
-		if board[spot]=="x":
-			xnum+=1
-		elif board[spot]=='o':
-			onum+=1
-	
-	if onum>xnum:
-		return "x"
-	elif xnum>onum:
-		return "o"
-	else:
-		return random.choice(["x","o"])
 
 def checkBoard(board):
 	if (" " not in board):
@@ -228,17 +212,26 @@ def recieveText():
 		)
 		responseText=board
 	else:
-		print "--------incoming---------"
 		board = parseBoardIn(str(request.form['Body']))
-		printBoard(board)
-		print "-------------------------"
+		
+		# debug:
+		# print "--------incoming---------"
+		# printBoard(board)
+		# print "-------------------------"
 
-		print "--------outgoing---------"
 		board = makeMove(board,'o')
-		printBoard(board)
-		responseText = parseBoardOut(board)
-		print responseText
-		print "-------------------------"
+		if (board==None):
+			responseText = "The game is over, please start a new game"
+		elif(board=="x" or board=="o"):
+			responseText = board,"has won"
+		else:
+			responseText = parseBoardOut(board)
+		
+		# debug:
+		# print "--------outgoing---------"
+		# printBoard(board)
+		# print responseText
+		# print "-------------------------"
 
 	client.messages.create(
 	    to=fromNum,
@@ -249,4 +242,4 @@ def recieveText():
 
 
 if __name__ == '__main__':
-	app.run()
+	app.run(debug=True)
